@@ -1,0 +1,104 @@
+{
+ "languageModel": {
+   "intents": [
+     {
+       "name": "AMAZON.CancelIntent",
+       "samples": []
+     },
+     {
+       "name": "AMAZON.HelpIntent",
+       "samples": []
+     },
+     {
+       "name": "AMAZON.StopIntent",
+       "samples": []
+     },
+     {
+       "name": "Introduction",
+       "samples": [
+         "what you can do",
+         "what can you do",
+         "what can you do for me"
+       ],
+       "slots": []
+     },
+     {
+       "name": "Temperature",
+       "samples": [
+         "what is the temperature of my tank",
+         "what is the temperature of my reef tank"
+       ],
+       "slots": []
+     },
+     {
+       "name": "Camera",
+       "samples": [
+         "send a snapshot of my tank",
+         "send a snapshot of my reef tank",
+         "send a photo of my tank",
+         "send a photo of my reef tank"
+       ],
+       "slots": []
+     },
+     {
+       "name": "FanOff",
+       "samples": [
+         "turn off Fan",
+         "switch off Fan",
+         "turn off the Fan",
+         "switch off the Fan"
+       ],
+       "slots": []
+     },
+     {
+       "name": "FanOn",
+       "samples": [
+         "turn on Fan",
+         "switch on Fan",
+         "turn on the Fan",
+         "switch on the Fan"
+       ],
+       "slots": []
+     },
+     {
+       "name": "LightsOff",
+       "samples": [
+         "turn off lights",
+         "switch off lights",
+         "turn off the lights",
+         "switch off the lights"
+       ],
+       "slots": []
+     },
+     {
+       "name": "LightsOn",
+       "samples": [
+         "turn on lights",
+         "switch on lights",
+         "turn on the lights",
+         "switch on the lights"
+       ],
+       "slots": []
+     },
+     {
+       "name": "Notification",
+       "samples": [
+         "what are my notifications",
+         "are there any notifications",
+         "are there any updates",
+         "read out my notifications"
+       ],
+       "slots": []
+     },
+     {
+       "name": "HealthCheck",
+       "samples": [
+         "what is my device status",
+         "what is the status of my devices"
+       ],
+       "slots": []
+     }
+   ],
+   "invocationName": "reef pi"
+ }
+}
