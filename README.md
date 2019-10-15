@@ -16,11 +16,11 @@ No tutorial or guide available yet as these are the first baby steps.
 Currently available capabilities:
 
 Get/Return:
--Equipment Overview: 
--Outlet Overview:
+- Equipment Overview: 
+- Outlet Overview:
 
 Control:
--none
+- none
 
 
 Additional context
