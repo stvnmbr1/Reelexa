@@ -3,11 +3,23 @@
 
 const Alexa = require('ask-sdk-core');
 
-const getRemoteDataHandler = {
+const LaunchRequestHandler = {
   canHandle(handlerInput) {
-    return handlerInput.requestEnvelope.request.type === 'LaunchRequest'
-      || (handlerInput.requestEnvelope.request.type === 'IntentRequest'
-      && handlerInput.requestEnvelope.request.intent.name === 'GetEquipmentStatus');
+    return handlerInput.requestEnvelope.request.type === 'LaunchRequest';
+  },
+  handle(handlerInput) {
+    const speechText = 'Welcome to Reef-Pi!';
+
+    return handlerInput.responseBuilder
+      .speak(speechText)
+      .getResponse();
+  }
+};
+
+const GetEquipmentHandler = {
+  canHandle(handlerInput) {
+    return (handlerInput.requestEnvelope.request.type === 'IntentRequest'
+      && handlerInput.requestEnvelope.request.intent.name === 'GetEquipmentIntent');
   },
   async handle(handlerInput) {
     let outputSpeech = 'This is the default message.';
@@ -53,13 +65,38 @@ const getRemoteDataHandler = {
   },
 };
 
+const GetOutletsHandler = {
+  canHandle(handlerInput) {
+    return (handlerInput.requestEnvelope.request.type === 'IntentRequest'
+      && handlerInput.requestEnvelope.request.intent.name === 'GetOutletsIntent');
+  },
+  async handle(handlerInput) {
+    let outputSpeech = 'This is the default message.';
+
+    await getRemoteData('https://my-json-server.typicode.com/stvnmbr1/demo/comments')
+      .then((response) => {
+        const data = JSON.parse(response);
+        outputSpeech = `There are currently ${data.length} records. `;
+      })
+      .catch((err) => {
+        //set an optional error message here
+        //outputSpeech = err.message;
+      });
+
+    return handlerInput.responseBuilder
+      .speak(outputSpeech)
+      .getResponse();
+
+  },
+};
+
 const HelpIntentHandler = {
   canHandle(handlerInput) {
     return handlerInput.requestEnvelope.request.type === 'IntentRequest'
       && handlerInput.requestEnvelope.request.intent.name === 'AMAZON.HelpIntent';
   },
   handle(handlerInput) {
-    const speechText = 'You can introduce yourself by telling me your name';
+    const speechText = 'You can telling me your name';
 
     return handlerInput.responseBuilder
       .speak(speechText)
@@ -108,6 +145,21 @@ const ErrorHandler = {
   },
 };
 
+const HelloWorldIntentHandler = {
+  canHandle(handlerInput) {
+    return handlerInput.requestEnvelope.request.type === 'IntentRequest'
+      && handlerInput.requestEnvelope.request.intent.name === 'HelloWorldIntent';
+  },
+  handle(handlerInput) {
+    const speechText = 'Hello World!';
+
+    return handlerInput.responseBuilder
+      .speak(speechText)
+      .withSimpleCard('Hello World', speechText)
+      .getResponse();
+  }
+};
+
 const getRemoteData = function (url) {
   return new Promise((resolve, reject) => {
     const client = url.startsWith('https') ? require('https') : require('http');
@@ -127,7 +179,9 @@ const skillBuilder = Alexa.SkillBuilders.custom();
 
 exports.handler = skillBuilder
   .addRequestHandlers(
-    GetRemoteDataHandler,
+    LaunchRequestHandler,
+    GetEquipmentHandler,
+    GetOutletsHandler,
     HelpIntentHandler,
     CancelAndStopIntentHandler,
     SessionEndedRequestHandler
