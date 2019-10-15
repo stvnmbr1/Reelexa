@@ -3,7 +3,7 @@
 
 const Alexa = require('ask-sdk-core');
 
-const GetRemoteDataHandler = {
+const getRemoteDataHandler = {
   canHandle(handlerInput) {
     return handlerInput.requestEnvelope.request.type === 'LaunchRequest'
       || (handlerInput.requestEnvelope.request.type === 'IntentRequest'
@@ -19,27 +19,24 @@ const GetRemoteDataHandler = {
         for (let i = 0; i < data.length; i++) {
           if (i === 0) {
             //first record
-            if (data[i].on=='true'){
-            outputSpeech = outputSpeech + 'They are: ' + data[i].name + ' which is enabled ' + ', '
-            }
-            if (data[i].on=='false'){
-            outputSpeech = outputSpeech + 'They are: ' + data[i].name + ' which is disabled ' + ', '
+            if(data[i].on==true){
+            outputSpeech = outputSpeech + 'They are: ' + data[i].name + ' connected to pin ' + data[i].outlet + ' which is enabled ' + ', '
+            } else if (data[i].on==false) {
+              outputSpeech = outputSpeech + 'They are: ' + data[i].name + ' connected to pin ' + data[i].outlet + ' which is disabled ' + ', '
             }
           } else if (i === data.length - 1) {
             //last record
-            if (data[i].on=='true'){
-            outputSpeech = outputSpeech + 'and ' + data[i].name + ' which is enabled ' + '.'
-            }
-            if (data[i]=='false'){
-            outputSpeech = outputSpeech + 'and ' + data[i].name + ' which is disabled ' + '.'
+            if(data[i].on==true){
+            outputSpeech = outputSpeech + 'and ' + data[i].name + ' connected to pin ' + data[i].outlet + ' which is enabled ' + '.'
+            } else if (data[i].on==false) {
+              outputSpeech = outputSpeech + 'and ' + data[i].name + ' connected to pin ' + data[i].outlet + ' which is disabled ' + '.'
             }
           } else {
             //middle record(s)
-            if (data[i].on=='true'){
-            outputSpeech = outputSpeech + data[i].name + ' which is enabled ' + ', '
-            }
-            if (data[i].on=='false'){
-            outputSpeech = outputSpeech + data[i].name + ' which is disabled ' + ', '
+            if(data[i].on==true){
+            outputSpeech = outputSpeech + data[i].name + ' connected to pin ' + data[i].outlet + ' which is enabled' + ', '
+            } else if (data[i].on==false) {
+              outputSpeech = outputSpeech + data[i].name + ' connected to pin ' + data[i].outlet + ' which is disabled'+ ', '
             }
           }
         }
