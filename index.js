@@ -8,7 +8,7 @@ const LaunchRequestHandler = {
     return handlerInput.requestEnvelope.request.type === 'LaunchRequest';
   },
   handle(handlerInput) {
-    const speechText = 'Welcome to Reef-Pi!';
+    const speechText = 'Welcome to Reef-Pi!!';
 
     return handlerInput.responseBuilder
       .speak(speechText)
@@ -16,10 +16,10 @@ const LaunchRequestHandler = {
   }
 };
 
-const GetEquipmentHandler = {
+const GetEquipmentOverviewHandler = {
   canHandle(handlerInput) {
     return (handlerInput.requestEnvelope.request.type === 'IntentRequest'
-      && handlerInput.requestEnvelope.request.intent.name === 'GetEquipmentIntent');
+      && handlerInput.requestEnvelope.request.intent.name === 'GetEquipmentOverviewIntent');
   },
   async handle(handlerInput) {
     let outputSpeech = 'This is the default message.';
@@ -65,10 +65,10 @@ const GetEquipmentHandler = {
   },
 };
 
-const GetOutletsHandler = {
+const GetOutletOverviewHandler = {
   canHandle(handlerInput) {
     return (handlerInput.requestEnvelope.request.type === 'IntentRequest'
-      && handlerInput.requestEnvelope.request.intent.name === 'GetOutletsIntent');
+      && handlerInput.requestEnvelope.request.intent.name === 'GetOutletOverviewIntent');
   },
   async handle(handlerInput) {
     let outputSpeech = 'This is the default message.';
@@ -180,8 +180,8 @@ const skillBuilder = Alexa.SkillBuilders.custom();
 exports.handler = skillBuilder
   .addRequestHandlers(
     LaunchRequestHandler,
-    GetEquipmentHandler,
-    GetOutletsHandler,
+    GetEquipmentOverviewHandler,
+    GetOutletOverviewHandler,
     HelpIntentHandler,
     CancelAndStopIntentHandler,
     SessionEndedRequestHandler
