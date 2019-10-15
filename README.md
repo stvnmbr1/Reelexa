@@ -9,6 +9,19 @@ I will start with the ability to retrieve stats first, in a later stage controll
 As of now the skill is hosted in an AWS Lambda instance, which requires amazon & AWS developer accounts(and CC credentials).
 In a later stage I would like to host the Lambda instance on reef-pi to handle requests (easing end-user setup as no additional AWS lambda setup would be needed. API needs to be accessable through internet so Auth will be needed.
 
+No tutorial or guide available yet as these are the first baby steps.
+
+
+Currently available capabilities:
+
+Get/Return:
+-Equipment Overview: 
+-Outlet Overview:
+
+Control:
+-none
+
+
 Additional context
 
 Created a repo hosting progress so far.
