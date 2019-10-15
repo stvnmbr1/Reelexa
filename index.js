@@ -22,9 +22,8 @@ const GetEquipmentOverviewHandler = {
       && handlerInput.requestEnvelope.request.intent.name === 'GetEquipmentOverviewIntent');
   },
   async handle(handlerInput) {
-    let outputSpeech = 'This is the default message.';
-
-    await getRemoteData('https://my-json-server.typicode.com/stvnmbr1/demo/posts')
+    let outputSpeech = 'No data received for Equipment Overview.';
+    await getRemoteData('https://my-json-server.typicode.com/stvnmbr1/demo/equipment')
       .then((response) => {
         const data = JSON.parse(response);
         outputSpeech = `There are currently ${data.length} pieces of equipment setup. `;
@@ -32,23 +31,23 @@ const GetEquipmentOverviewHandler = {
           if (i === 0) {
             //first record
             if(data[i].on==true){
-            outputSpeech = outputSpeech + 'They are: ' + data[i].name + ' connected to pin ' + data[i].outlet + ' which is enabled ' + ', '
+            outputSpeech = outputSpeech + data[i].name + ' which is connected to pin ' + data[i].outlet + ' and enabled ' + ', '
             } else if (data[i].on==false) {
-              outputSpeech = outputSpeech + 'They are: ' + data[i].name + ' connected to pin ' + data[i].outlet + ' which is disabled ' + ', '
+              outputSpeech = outputSpeech + data[i].name + ' which is connected to pin ' + data[i].outlet + ' and disabled ' + ', '
             }
           } else if (i === data.length - 1) {
             //last record
             if(data[i].on==true){
-            outputSpeech = outputSpeech + 'and ' + data[i].name + ' connected to pin ' + data[i].outlet + ' which is enabled ' + '.'
+            outputSpeech = outputSpeech + 'and ' + data[i].name + ' which is connected to pin ' + data[i].outlet + ' and enabled ' + '.'
             } else if (data[i].on==false) {
-              outputSpeech = outputSpeech + 'and ' + data[i].name + ' connected to pin ' + data[i].outlet + ' which is disabled ' + '.'
+              outputSpeech = outputSpeech + 'and ' + data[i].name + ' which is connected to pin ' + data[i].outlet + ' and disabled ' + '.'
             }
           } else {
             //middle record(s)
             if(data[i].on==true){
-            outputSpeech = outputSpeech + data[i].name + ' connected to pin ' + data[i].outlet + ' which is enabled' + ', '
+            outputSpeech = outputSpeech + data[i].name + ' which is connected to pin ' + data[i].outlet + ' and enabled' + ', '
             } else if (data[i].on==false) {
-              outputSpeech = outputSpeech + data[i].name + ' connected to pin ' + data[i].outlet + ' which is disabled'+ ', '
+              outputSpeech = outputSpeech + data[i].name + ' which is connected to pin ' + data[i].outlet + ' and disabled'+ ', '
             }
           }
         }
@@ -71,13 +70,127 @@ const GetOutletOverviewHandler = {
       && handlerInput.requestEnvelope.request.intent.name === 'GetOutletOverviewIntent');
   },
   async handle(handlerInput) {
-    let outputSpeech = 'This is the default message.';
+    let outputSpeech = 'No data received for Outlet Overview.';
 
-    await getRemoteData('https://my-json-server.typicode.com/stvnmbr1/demo/comments')
+    await getRemoteData('https://my-json-server.typicode.com/stvnmbr1/demo/outlets')
       .then((response) => {
         const data = JSON.parse(response);
-        outputSpeech = `There are currently ${data.length} records. `;
+        outputSpeech = `There are currently ${data.length} outlets setup. `;
+        for (let i = 0; i < data.length; i++) {
+          if (i === 0) {
+            //first record
+            if(data[i].reverse==true){
+            outputSpeech = outputSpeech + data[i].name + ' which is connected to pin ' + data[i].pin + ' and reverse enabled ' + ', '
+            } else if (data[i].reverse==false) {
+              outputSpeech = outputSpeech + data[i].name + ' which is connected to pin ' + data[i].pin + ' and reverse disabled ' + ', '
+            }
+          } else if (i === data.length - 1) {
+            //last record
+            if(data[i].reverse==true){
+            outputSpeech = outputSpeech + 'and ' + data[i].name + ' which is connected to pin ' + data[i].pin + ' and reverse enabled ' + '.'
+            } else if (data[i].reverse==false) {
+              outputSpeech = outputSpeech + 'and ' + data[i].name + ' which is connected to pin ' + data[i].pin + ' and reverse disabled ' + '.'
+            }
+          } else {
+            //middle record(s)
+            if(data[i].reverse==true){
+            outputSpeech = outputSpeech + data[i].name + ' which is connected to pin ' + data[i].pin + ' and reverse enabled' + ', '
+            } else if (data[i].reverse==false) {
+              outputSpeech = outputSpeech + data[i].name + ' which is connected to pin ' + data[i].pin + ' and reverse disabled'+ ', '
+            }
+          }
+        }
       })
+      .catch((err) => {
+        //set an optional error message here
+        //outputSpeech = err.message;
+      });
+
+    return handlerInput.responseBuilder
+      .speak(outputSpeech)
+      .getResponse();
+
+  },
+};
+
+const GetNetworkSettingsHandler = {
+  canHandle(handlerInput) {
+    return (handlerInput.requestEnvelope.request.type === 'IntentRequest'
+      && handlerInput.requestEnvelope.request.intent.name === 'GetNetworkSettingsIntent');
+  },
+  async handle(handlerInput) {
+    let outputSpeech = 'No data received for Network Settings.';
+
+    await getRemoteData('https://my-json-server.typicode.com/stvnmbr1/demo/settings')
+      .then((response) => {
+        const data = JSON.parse(response);
+            //first record
+            if(data[0].https==true){
+            outputSpeech = data[0].name + ', connected to interface ' + data[0].interface + ' with listen IP address ' + data[0].address + ' and HTTPS enabled.'
+            } else if (data[0].https==false) {
+            outputSpeech = data[0].name + ', connected to interface ' + data[0].interface + ' with listen IP address ' + data[0].address + ' and HTTPS disabled.'
+            }
+          })
+      .catch((err) => {
+        //set an optional error message here
+        //outputSpeech = err.message;
+      });
+
+    return handlerInput.responseBuilder
+      .speak(outputSpeech)
+      .getResponse();
+
+  },
+};
+
+const GetMacroOverviewHandler = {
+  canHandle(handlerInput) {
+    return (handlerInput.requestEnvelope.request.type === 'IntentRequest'
+      && handlerInput.requestEnvelope.request.intent.name === 'GetMacroOverviewIntent');
+  },
+  async handle(handlerInput) {
+    let outputSpeech = 'No data received for Network Settings.';
+
+    await getRemoteData('https://my-json-server.typicode.com/stvnmbr1/demo/macros')
+      .then((response) => {
+        const data = JSON.parse(response);
+            //first record
+            if(data[0].https==true){
+            outputSpeech = data[0].name + ', connected to interface ' + data[0].interface + ' with listen IP address ' + data[0].address + ' and HTTPS enabled.'
+            } else if (data[0].https==false) {
+            outputSpeech = data[0].name + ', connected to interface ' + data[0].interface + ' with listen IP address ' + data[0].address + ' and HTTPS disabled.'
+            }
+          })
+      .catch((err) => {
+        //set an optional error message here
+        //outputSpeech = err.message;
+      });
+
+    return handlerInput.responseBuilder
+      .speak(outputSpeech)
+      .getResponse();
+
+  },
+};
+
+const GetTimerOverviewHandler = {
+  canHandle(handlerInput) {
+    return (handlerInput.requestEnvelope.request.type === 'IntentRequest'
+      && handlerInput.requestEnvelope.request.intent.name === 'GetTimerOverviewIntent');
+  },
+  async handle(handlerInput) {
+    let outputSpeech = 'No data received for Network Settings.';
+
+    await getRemoteData('https://my-json-server.typicode.com/stvnmbr1/demo/timers')
+      .then((response) => {
+        const data = JSON.parse(response);
+            //first record
+            if(data[0].https==true){
+            outputSpeech = data[0].name + ', connected to interface ' + data[0].interface + ' with listen IP address ' + data[0].address + ' and HTTPS enabled.'
+            } else if (data[0].https==false) {
+            outputSpeech = data[0].name + ', connected to interface ' + data[0].interface + ' with listen IP address ' + data[0].address + ' and HTTPS disabled.'
+            }
+          })
       .catch((err) => {
         //set an optional error message here
         //outputSpeech = err.message;
@@ -182,6 +295,9 @@ exports.handler = skillBuilder
     LaunchRequestHandler,
     GetEquipmentOverviewHandler,
     GetOutletOverviewHandler,
+    GetNetworkSettingsHandler,
+    GetTimerOverviewHandler,
+    GetMacroOverviewHandler,
     HelpIntentHandler,
     CancelAndStopIntentHandler,
     SessionEndedRequestHandler
