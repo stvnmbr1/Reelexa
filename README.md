@@ -18,9 +18,17 @@ Currently available capabilities:
 Get/Return:
 - Equipment Overview: 
 - Outlet Overview:
+- Macro Overview:
+- Timer Overview:
+- Network Settings:
+
 
 Control:
 - none
+
+Planned:
+
+Get metrics with prometheus integration and more
 
 
 Additional context
