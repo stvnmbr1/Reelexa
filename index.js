@@ -3,6 +3,7 @@
 
 const Alexa = require('ask-sdk-core');
 var https = require('https');
+var http = require('http')
 
 const LaunchRequestHandler = {
   canHandle(handlerInput) {
@@ -242,7 +243,54 @@ const GetTimerOverviewHandler = {
   },
 };
 
+const GetLoginHandler = {
+  canHandle(handlerInput) {
+    return (handlerInput.requestEnvelope.request.type === 'IntentRequest'
+      && handlerInput.requestEnvelope.request.intent.name === 'GetLoginIntent');
+  },
+  async handle(handlerInput) {
+    let outputSpeech = 'No data received for Timer Overview.';
+        const token = await post("/auth/login", { username:"reef-pi", password: "reef-pi" });
+        await getRemoteData('https://my-json-server.typicode.com/stvnmbr1/demo/timers',token)
+      .then((response) => {
+        const data = JSON.parse(response);
+        outputSpeech = `There are currently ${data.length} timers setup. `;
+        for (let i = 0; i < data.length; i++) {
+          if (i === 0) {
+            //first record
+            if(data[i].enable==true){
+            outputSpeech = outputSpeech + data[i].name + ' which is enabled and controls ' + data[i].type + ' that runs every ' + data[i].day + ' ,rest: ' + data[i].hour + data[i].minute + data[i].second + 'for a duration of ' + data[i].equipment.duration + ' seconds, '
+            } else if (data[i].enable==false) {
+            outputSpeech = outputSpeech + data[i].name + ' which is disabled and controls ' + data[i].type + ' that runs every ' + data[i].day + ' ,rest: ' + data[i].hour + data[i].minute + data[i].second + 'for a duration of ' + data[i].equipment.duration + ' seconds, '
+            }
+          } else if (i === data.length - 1) {
+            //last record
+            if(data[i].enable==true){
+            outputSpeech = outputSpeech + data[i].name + ' which is enabled and controls ' + data[i].type + ' that runs every ' + data[i].day + ' ,rest: ' + data[i].hour + data[i].minute + data[i].second + 'for a duration of ' + data[i].equipment.duration + ' seconds. '
+            } else if (data[i].enable==false) {
+            outputSpeech = outputSpeech + data[i].name + ' which is disabled and controls ' + data[i].type + ' that runs every ' + data[i].day + ' ,rest: ' + data[i].hour + data[i].minute + data[i].second + 'for a duration of ' + data[i].equipment.duration + ' seconds. '
+            }
+          } else {
+            //middle record(s)
+            if(data[i].enable==true){
+            outputSpeech = outputSpeech + ' and ' + data[i].name + ' which is enabled and controls ' + data[i].type + ' that runs every ' + data[i].day + ' ,rest: ' + data[i].hour + data[i].minute + data[i].second + 'for a duration of ' + data[i].equipment.duration + ' seconds, '
+            } else if (data[i].enable==false) {
+            outputSpeech = outputSpeech + ' and '+ data[i].name + ' which is disabled and controls ' + data[i].type + ' that runs every ' + data[i].day + ' ,rest: ' + data[i].hour + data[i].minute + data[i].second + 'for a duration of ' + data[i].equipment.duration + ' seconds, '
+            }
+          }
+        }
+      })
+      .catch((err) => {
+        //set an optional error message here
+        //outputSpeech = err.message;
+      });
 
+    return handlerInput.responseBuilder
+      .speak(outputSpeech)
+      .getResponse();
+
+  },
+};
 
 const HelpIntentHandler = {
   canHandle(handlerInput) {
@@ -314,10 +362,31 @@ const HelloWorldIntentHandler = {
   }
 };
 
-const getRemoteData = function (url) {
+const defaultOptions = {
+    host: '78.23.233.208',
+    path: '/auth/api',
+    port: 8800, // or 443 for https
+    headers: {
+        'Content-Type': 'application/json',
+    }
+}
+
+const post = (path, payload) => new Promise((resolve, reject) => {
+    const options = { ...defaultOptions, method: 'POST' };
+    const req = http.request(options, res => {
+        let buffer = "";
+        res.on('data', chunk => buffer += chunk)
+        res.on('end', () => resolve(JSON.parse(buffer)))
+    });
+    req.on('error', e => reject(e.message));
+    req.write(JSON.stringify(payload));
+    req.end();
+})
+
+const getRemoteData = function (url, token) {
   return new Promise((resolve, reject) => {
     const client = url.startsWith('https') ? require('https') : require('http');
-    const request = client.get(url, (response) => {
+    const request = client.get(url, token, (response) => {
       if (response.statusCode < 200 || response.statusCode > 299) {
         reject(new Error('Failed with status code: ' + response.statusCode));
       }
@@ -329,11 +398,17 @@ const getRemoteData = function (url) {
   })
 };
 
+
+
+
+
 const skillBuilder = Alexa.SkillBuilders.custom();
 
 exports.handler = skillBuilder
   .addRequestHandlers(
     LaunchRequestHandler,
+    GetLoginHandler,
+  
     GetEquipmentOverviewHandler,
     GetOutletOverviewHandler,
     GetNetworkSettingsHandler,
@@ -345,4 +420,3 @@ exports.handler = skillBuilder
   )
   .addErrorHandlers(ErrorHandler)
   .lambda();
-
