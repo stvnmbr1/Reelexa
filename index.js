@@ -363,7 +363,7 @@ const HelloWorldIntentHandler = {
 };
 
 const defaultOptions = {
-    host: '78.23.233.208',
+    host: 'ip',
     path: '/auth/api',
     port: 8800, // or 443 for https
     headers: {
