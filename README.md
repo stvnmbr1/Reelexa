@@ -1,4 +1,5 @@
 # Reeflexa
+Relaxed reefing with Alexa
 
 Creating an Alexa skill for reef-pi
 
@@ -30,6 +31,9 @@ Planned:
 
 Get metrics with prometheus integration and more
 
+
+V2.0
+Smart Home skill
 
 Additional context
 
