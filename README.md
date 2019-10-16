@@ -1,5 +1,5 @@
 # Reeflexa
-Relaxed reefing with Alexa
+Relaxed reefing with Alexa and Reef-Pi
 
 Creating an Alexa skill for reef-pi
 
