@@ -420,14 +420,8 @@ const httppost = function (path) {
     method: 'POST'
   }
   
-    const login = https.request(url, (response) => {
-      if (response.statusCode < 200 || response.statusCode > 299) {
-        reject(new Error('Failed with status code: ' + response.statusCode));
-      }
-      const body = [];
-      response.on('data', (chunk) => body.push(chunk));
-      response.on('end', () => resolve(body.join('')));
-    });
+    const login = https.request(options)
+    login.end()
     login.on('error', (err) => reject(err))
   })
 };
