@@ -6,15 +6,12 @@ const options = {
   path: '/b9416f6a-5dd5-4a16-af99-75f7c8245f53',
   port: 443,
   method: 'POST',
+  headers: { 'Content-type': 'application/json' },
   json: true,
-  form: logindata
+  jar: true,
+  body: logindata,
 }
 
 const req = https.request(options)
-
-req.on('error', error => {
-  console.error(error)
-})
-
+req.write(logindata)
 req.end()
-         
