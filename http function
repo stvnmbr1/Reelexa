@@ -1,7 +1,7 @@
 const https = require('https')
 var logindata = JSON.stringify({user: "reef-pi", password: "reef-pi"})
 
-const options = {
+const loginoptions = {
   hostname: 'webhook.site',
   path: '/b9416f6a-5dd5-4a16-af99-75f7c8245f53',
   port: 443,
@@ -12,6 +12,30 @@ const options = {
   body: logindata,
 }
 
-const req = https.request(options)
+const req = https.request(loginoptions)
 req.write(logindata)
 req.end()
+
+
+const getoptions = {
+  hostname: 'webhook.site',
+  path: '/b9416f6a-5dd5-4a16-af99-75f7c8245f53',
+  port: 443,
+  method: 'GET',
+  jar: true,
+}
+
+const get = https.request(getoptions)
+req.end()
+
+var url = "https://webhook.site/b9416f6a-5dd5-4a16-af99-75f7c8245f53"
+
+ const request = https.get(url, getoptions, (response) => {
+
+      if (response.statusCode < 200 || response.statusCode > 299) {
+        reject(new Error('Failed with status code: ' + response.statusCode));
+      }
+      const body = [];
+      response.on('data', (chunk) => body.push(chunk));
+      response.on('end', () => body.join(''));
+    })
