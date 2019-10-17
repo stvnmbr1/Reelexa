@@ -56,7 +56,7 @@ const GetEquipmentOverviewHandler = {
       })
       .catch((err) => {
         //set an optional error message here
-        //outputSpeech = err.message;
+        outputSpeech = err.message;
       });
 
     return handlerInput.responseBuilder
@@ -105,7 +105,7 @@ const GetOutletOverviewHandler = {
       })
       .catch((err) => {
         //set an optional error message here
-        //outputSpeech = err.message;
+        outputSpeech = err.message;
       });
 
     return handlerInput.responseBuilder
@@ -135,7 +135,7 @@ const GetNetworkSettingsHandler = {
           })
       .catch((err) => {
         //set an optional error message here
-        //outputSpeech = err.message;
+        outputSpeech = err.message;
       });
 
     return handlerInput.responseBuilder
@@ -234,7 +234,7 @@ const GetMacroOverviewHandler = {
       })
       .catch((err) => {
         //set an optional error message here
-        //outputSpeech = err.message;
+        outputSpeech = err.message;
       });
 
     return handlerInput.responseBuilder
@@ -283,7 +283,7 @@ const GetTimerOverviewHandler = {
       })
       .catch((err) => {
         //set an optional error message here
-        //outputSpeech = err.message;
+        outputSpeech = err.message;
       });
 
     return handlerInput.responseBuilder
@@ -331,7 +331,7 @@ const GetAPITestHandler = {
       })
       .catch((err) => {
         //set an optional error message here
-        //outputSpeech = err.message;
+        outputSpeech = err.message;
       });
 
     return handlerInput.responseBuilder
@@ -413,24 +413,20 @@ const HelloWorldIntentHandler = {
 
 const httppost = function (path) {
   return new Promise((resolve, reject) => {
-  var logindata = JSON.stringify({user: "reef-pi", password: "reef-pi"})
-  
-  const postoptions = {
+  const options = {
     hostname: 'webhook.site',
     path: path,
     port: 443,
-    method: 'POST',
-    json: true,
-    form: logindata
+    method: 'POST'
   }
   
     const login = https.request(url, (response) => {
       if (response.statusCode < 200 || response.statusCode > 299) {
         reject(new Error('Failed with status code: ' + response.statusCode));
       }
-    login.on('data', d => {
-    process.stdout.write(d)
-    })
+      const body = [];
+      response.on('data', (chunk) => body.push(chunk));
+      response.on('end', () => resolve(body.join('')));
     });
     login.on('error', (err) => reject(err))
   })
