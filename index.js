@@ -436,6 +436,7 @@ const httpget = function (url) {
     port: 443,
     method: 'GET',
     json: true,
+    jar: true,
     form: logindata,
     headers: logindata
   }
