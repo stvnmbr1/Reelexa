@@ -1,35 +1,20 @@
+const https = require('https')
+var logindata = JSON.stringify({user: "reef-pi", password: "reef-pi"})
 
-const getRemoteDataJar = function () {
-    var logindata = JSON.stringify({user: "reef-pi", password: "reef-pi"})
-    const loginoptions = {
-      host: 'https://webhook.site',
-      path: '/b9416f6a-5dd5-4a16-af99-75f7c8245f53',
-      port: '443',
-      method: 'POST',
-      json: true,
-      body: logindata
-    }
-    const login = http.request(loginoptions, (response) => {
-      const cookie = [];
-      response.on('data', (chunk) => cookie.push(chunk));
-      response.on('end', () => resolve(cookie.join('')));
-    });
-    request.on('error', (err) => reject(err))
-    
-    const getoptions = {
-      host: 'https://webhook.site',
-      path: '/b9416f6a-5dd5-4a16-af99-75f7c8245f53',
-      port: '443',
-      method: 'GET',
-      header: login.headers
-    }
-    const request = http.request(getoptions, url, (response) => {
-      if (response.statusCode < 200 || response.statusCode > 299) {
-        reject(new Error('Failed with status code: ' + response.statusCode));
-      }
-      const body = [];
-      response.on('data', (chunk) => body.push(chunk));
-      response.on('end', () => resolve(body.join('')));
-    });
-    request.on('error', (err) => reject(err))
+const options = {
+  hostname: 'webhook.site',
+  path: '/b9416f6a-5dd5-4a16-af99-75f7c8245f53',
+  port: 443,
+  method: 'POST',
+  json: true,
+  form: logindata
 }
+
+const req = https.request(options)
+
+req.on('error', error => {
+  console.error(error)
+})
+
+req.end()
+         
