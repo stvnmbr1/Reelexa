@@ -3,7 +3,7 @@
 
 const Alexa = require('ask-sdk-core');
 var https = require('https');
-var http = require('http')
+var http = require('http');
 
 const LaunchRequestHandler = {
   canHandle(handlerInput) {
@@ -145,6 +145,56 @@ const GetNetworkSettingsHandler = {
   },
 };
 
+const GetCapabilitiesOverviewHandler = {
+  canHandle(handlerInput) {
+    return (handlerInput.requestEnvelope.request.type === 'IntentRequest'
+      && handlerInput.requestEnvelope.request.intent.name === 'GetCapabilitiesOverviewIntent');
+  },
+  async handle(handlerInput) {
+    let outputSpeech = 'No data received for capabilities overview.';
+
+    await getRemoteData('https://my-json-server.typicode.com/stvnmbr1/demo/capabilities')
+      .then((response) => {
+        const data = JSON.parse(response);
+        const datastring = JSON.stringify(data)
+        outputSpeech = `${datastring}`;
+        for (let i = 0; i < data.length; i++) {
+          if (i === 0) {
+            //first record
+            if(data[i]==true){
+            outputSpeech = outputSpeech + data[i] + ' which is enabled ' + ', '
+            } else if (data[i]==false) {
+              outputSpeech = outputSpeech + data[i] + ' which is disabled ' + ', '
+            }
+          } else if (i === data.length - 1) {
+            //last record
+            if(data[i]==true){
+            outputSpeech = outputSpeech + 'and ' + data[i] + ' which is enabled ' + '.'
+            } else if (data[i]==false) {
+              outputSpeech = outputSpeech + 'and ' + data[i] + ' which is disabled ' + '.'
+            }
+          } else {
+            //middle record(s)
+            if(data[i]==true){
+            outputSpeech = outputSpeech + data[i] + ' which is enabled' + ', '
+            } else if (data[i]==false) {
+              outputSpeech = outputSpeech + data[i] + ' which is disabled'+ ', '
+            }
+          }
+        }
+      })
+      .catch((err) => {
+        //set an optional error message here
+      outputSpeech = err.message;
+      });
+
+    return handlerInput.responseBuilder
+      .speak(outputSpeech)
+      .getResponse();
+
+  },
+};
+
 const GetMacroOverviewHandler = {
   canHandle(handlerInput) {
     return (handlerInput.requestEnvelope.request.type === 'IntentRequest'
@@ -243,15 +293,14 @@ const GetTimerOverviewHandler = {
   },
 };
 
-const GetLoginHandler = {
+const GetAPITestHandler = {
   canHandle(handlerInput) {
     return (handlerInput.requestEnvelope.request.type === 'IntentRequest'
-      && handlerInput.requestEnvelope.request.intent.name === 'GetLoginIntent');
+      && handlerInput.requestEnvelope.request.intent.name === 'GetAPITestIntent');
   },
   async handle(handlerInput) {
     let outputSpeech = 'No data received for Timer Overview.';
-        const token = await post("/auth/login", { username:"reef-pi", password: "reef-pi" });
-        await getRemoteData('https://my-json-server.typicode.com/stvnmbr1/demo/timers',token)
+    await httppost('/b9416f6a-5dd5-4a16-af99-75f7c8245f53')
       .then((response) => {
         const data = JSON.parse(response);
         outputSpeech = `There are currently ${data.length} timers setup. `;
@@ -362,31 +411,63 @@ const HelloWorldIntentHandler = {
   }
 };
 
-const defaultOptions = {
-    host: 'ip',
-    path: '/auth/api',
-    port: 8800, // or 443 for https
-    headers: {
-        'Content-Type': 'application/json',
-    }
-}
-
-const post = (path, payload) => new Promise((resolve, reject) => {
-    const options = { ...defaultOptions, method: 'POST' };
-    const req = http.request(options, res => {
-        let buffer = "";
-        res.on('data', chunk => buffer += chunk)
-        res.on('end', () => resolve(JSON.parse(buffer)))
+const httppost = function (path) {
+  return new Promise((resolve, reject) => {
+  var logindata = JSON.stringify({user: "reef-pi", password: "reef-pi"})
+  
+  const postoptions = {
+    hostname: 'webhook.site',
+    path: path,
+    port: 443,
+    method: 'POST',
+    json: true,
+    form: logindata
+  }
+  
+    const login = https.request(url, (response) => {
+      if (response.statusCode < 200 || response.statusCode > 299) {
+        reject(new Error('Failed with status code: ' + response.statusCode));
+      }
+    login.on('data', d => {
+    process.stdout.write(d)
+    })
     });
-    req.on('error', e => reject(e.message));
-    req.write(JSON.stringify(payload));
-    req.end();
-})
+    login.on('error', (err) => reject(err))
+  })
+};
 
-const getRemoteData = function (url, token) {
+const httpget = function (url) {
+  return new Promise((resolve, reject) => {
+  var logindata = JSON.stringify({user: "reef-pi", password: "reef-pi"})
+  
+  const getoptions = {
+    hostname: 'webhook.site',
+    path: '/b9416f6a-5dd5-4a16-af99-75f7c8245f53',
+    port: 443,
+    method: 'GET',
+    json: true,
+    form: logindata,
+    headers: logindata
+  }
+  
+    const gethttp = https.request(getoptions, (response) => {
+      if (response.statusCode < 200 || response.statusCode > 299) {
+        reject(new Error('Failed with status code: ' + response.statusCode));
+      }
+      const body = [];
+      response.on('data', (chunk) => body.push(chunk));
+      response.on('end', () => resolve(body.join('')));
+    });
+    gethttp.on('error', (err) => reject(err))
+  })
+};
+
+
+
+const getRemoteData = function (url) {
   return new Promise((resolve, reject) => {
     const client = url.startsWith('https') ? require('https') : require('http');
-    const request = client.get(url, token, (response) => {
+    const request = client.get(url, (response) => {
       if (response.statusCode < 200 || response.statusCode > 299) {
         reject(new Error('Failed with status code: ' + response.statusCode));
       }
@@ -399,19 +480,16 @@ const getRemoteData = function (url, token) {
 };
 
 
-
-
-
 const skillBuilder = Alexa.SkillBuilders.custom();
 
 exports.handler = skillBuilder
   .addRequestHandlers(
     LaunchRequestHandler,
-    GetLoginHandler,
-  
+    GetAPITestHandler,
     GetEquipmentOverviewHandler,
     GetOutletOverviewHandler,
     GetNetworkSettingsHandler,
+    GetCapabilitiesOverviewHandler,
     GetTimerOverviewHandler,
     GetMacroOverviewHandler,
     HelpIntentHandler,
