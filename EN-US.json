@@ -1,0 +1,75 @@
+{
+    "interactionModel": {
+        "languageModel": {
+            "invocationName": "reef pi",
+            "intents": [
+                {
+                    "name": "AMAZON.CancelIntent",
+                    "samples": []
+                },
+                {
+                    "name": "AMAZON.HelpIntent",
+                    "samples": []
+                },
+                {
+                    "name": "AMAZON.StopIntent",
+                    "samples": []
+                },
+                {
+                    "name": "GetEquipmentOverviewIntent",
+                    "slots": [],
+                    "samples": [
+                        "equipment overview"
+                    ]
+                },
+                {
+                    "name": "AMAZON.NavigateHomeIntent",
+                    "samples": []
+                },
+                {
+                    "name": "GetOutletOverviewIntent",
+                    "slots": [],
+                    "samples": [
+                        "outlet overview"
+                    ]
+                },
+                {
+                    "name": "GetNetworkSettingsIntent",
+                    "slots": [],
+                    "samples": [
+                        "network settings"
+                    ]
+                },
+                {
+                    "name": "GetTimerOverviewIntent",
+                    "slots": [],
+                    "samples": [
+                        "timer overview"
+                    ]
+                },
+                {
+                    "name": "GetMacroOverviewIntent",
+                    "slots": [],
+                    "samples": [
+                        "macro overview"
+                    ]
+                },
+                {
+                    "name": "GetCapabilitiesOverviewIntent",
+                    "slots": [],
+                    "samples": [
+                        "capabilities overview"
+                    ]
+                },
+                {
+                    "name": "GetAPITestIntent",
+                    "slots": [],
+                    "samples": [
+                        "test api"
+                    ]
+                }
+            ],
+            "types": []
+        }
+    }
+}
