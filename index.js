@@ -300,7 +300,8 @@ const GetAPITestHandler = {
   },
   async handle(handlerInput) {
     let outputSpeech = 'No data received for Timer Overview.';
-    await httppost('/b9416f6a-5dd5-4a16-af99-75f7c8245f53')
+    await getApiData('/b9416f6a-5dd5-4a16-af99-75f7c8245f53')
+
       .then((response) => {
         const data = JSON.parse(response);
         outputSpeech = `There are currently ${data.length} timers setup. `;
@@ -417,7 +418,10 @@ const httppost = function (path) {
     hostname: 'webhook.site',
     path: path,
     port: 443,
-    method: 'POST'
+    method: 'POST',
+    json: true,
+    headers: { 'Content-type': 'application/json' },
+
   }
   
     const login = https.request(options)
@@ -426,22 +430,36 @@ const httppost = function (path) {
   })
 };
 
-const httpget = function (url) {
+const getApiData = function (path) {
   return new Promise((resolve, reject) => {
-  var logindata = JSON.stringify({user: "reef-pi", password: "reef-pi"})
-  
-  const getoptions = {
-    hostname: 'webhook.site',
-    path: '/b9416f6a-5dd5-4a16-af99-75f7c8245f53',
-    port: 443,
-    method: 'GET',
-    json: true,
-    jar: true,
-    form: logindata,
-    headers: logindata
-  }
-  
-    const gethttp = https.request(getoptions, (response) => {
+var logindata = JSON.stringify({user: "reef-pi", password: "reef-pi"});
+
+const loginoptions = {
+  hostname: 'webhook.site',
+  path: '/b9416f6a-5dd5-4a16-af99-75f7c8245f53',
+  port: 443,
+  method: 'POST',
+  headers: { 'Content-type': 'application/json' },
+  json: true,
+  jar: true,
+  body: logindata,
+}
+
+const req = https.request(loginoptions)
+req.write(logindata)
+console.log(req.response)
+
+
+
+    const getoptions = {
+      hostname: 'webhook.site',
+      path: '/b9416f6a-5dd5-4a16-af99-75f7c8245f53',
+      port: 443,
+      method: 'GET',
+      jar: true,
+    }
+
+    const request = https.get(getoptions, (response) => {
       if (response.statusCode < 200 || response.statusCode > 299) {
         reject(new Error('Failed with status code: ' + response.statusCode));
       }
@@ -449,7 +467,8 @@ const httpget = function (url) {
       response.on('data', (chunk) => body.push(chunk));
       response.on('end', () => resolve(body.join('')));
     });
-    gethttp.on('error', (err) => reject(err))
+    request.on('error', (err) => reject(err))
+    req.end()
   })
 };
 
