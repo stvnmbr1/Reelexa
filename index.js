@@ -422,12 +422,12 @@ const httppost = function (path) {
     json: true,
     headers: { 'Content-type': 'application/json' },
 
-  }
+  };
   
-    const login = https.request(options)
-    login.end()
-    login.on('error', (err) => reject(err))
-  })
+    const login = https.request(options);
+    login.end();
+    login.on('error', (err) => reject(err));
+  });
 };
 
 const getApiData = function (path) {
@@ -443,12 +443,11 @@ const loginoptions = {
   json: true,
   jar: true,
   body: logindata,
-}
+};
 
-const req = https.request(loginoptions)
-req.write(logindata)
-console.log(req.response)
-
+const req = https.request(loginoptions);
+req.write(logindata);
+req.end();
 
 
     const getoptions = {
@@ -458,7 +457,7 @@ console.log(req.response)
       method: 'GET',
       headers: { 'Content-type': 'application/json' },
       json: true,
-    }
+    };
 
     const request = https.get(getoptions, (response) => {
       if (response.statusCode < 200 || response.statusCode > 299) {
@@ -468,9 +467,8 @@ console.log(req.response)
       response.on('data', (chunk) => body.push(chunk));
       response.on('end', () => resolve(body.join('')));
     });
-    request.on('error', (err) => reject(err))
-    req.end()
-  })
+    request.on('error', (err) => reject(err));
+  });
 };
 
 
@@ -486,8 +484,8 @@ const getRemoteData = function (url) {
       response.on('data', (chunk) => body.push(chunk));
       response.on('end', () => resolve(body.join('')));
     });
-    request.on('error', (err) => reject(err))
-  })
+    request.on('error', (err) => reject(err));
+  });
 };
 
 
