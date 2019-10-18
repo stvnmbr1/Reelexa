@@ -456,7 +456,8 @@ console.log(req.response)
       path: '/b9416f6a-5dd5-4a16-af99-75f7c8245f53',
       port: 443,
       method: 'GET',
-      jar: true,
+      headers: { 'Content-type': 'application/json' },
+      json: true,
     }
 
     const request = https.get(getoptions, (response) => {
