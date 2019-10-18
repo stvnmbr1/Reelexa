@@ -4,6 +4,8 @@
 const Alexa = require('ask-sdk-core');
 var https = require('https');
 var http = require('http');
+var jar = require('./jar');
+
 
 const LaunchRequestHandler = {
   canHandle(handlerInput) {
@@ -432,12 +434,14 @@ const httppost = function (path) {
 
 const getApiData = function (path) {
   return new Promise((resolve, reject) => {
-var logindata = JSON.stringify({user: "reef-pi", password: "reef-pi"});
+    const logindata = JSON.stringify({user: "reef-pi", password: "reef-pi"});
+     var jar = request.jar();
+    jar.setJar(request.jar());
 
 const loginoptions = {
-  hostname: 'webhook.site',
-  path: '/b9416f6a-5dd5-4a16-af99-75f7c8245f53',
-  port: 443,
+  hostname: '',
+  path: '/auth/singin',
+  port: 8800,
   method: 'POST',
   headers: { 'Content-type': 'application/json' },
   json: true,
@@ -445,21 +449,19 @@ const loginoptions = {
   body: logindata,
 };
 
-const req = https.request(loginoptions);
+const req = http.request(loginoptions);
 req.write(logindata);
 req.end();
 
-
     const getoptions = {
-      hostname: 'webhook.site',
-      path: '/b9416f6a-5dd5-4a16-af99-75f7c8245f53',
-      port: 443,
+      hostname: '',
+      path: '/api/timers',
+      port: ,
       method: 'GET',
-      headers: { 'Content-type': 'application/json' },
-      json: true,
+      jar: jar.getJar(),
     };
 
-    const request = https.get(getoptions, (response) => {
+    const request = http.get(getoptions, (response) => {
       if (response.statusCode < 200 || response.statusCode > 299) {
         reject(new Error('Failed with status code: ' + response.statusCode));
       }
