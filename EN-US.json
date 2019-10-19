@@ -1,7 +1,7 @@
 {
     "interactionModel": {
         "languageModel": {
-            "invocationName": "reef pi",
+            "invocationName": "reef pie",
             "intents": [
                 {
                     "name": "AMAZON.CancelIntent",
@@ -66,6 +66,69 @@
                     "slots": [],
                     "samples": [
                         "test api"
+                    ]
+                },
+                {
+                    "name": "GetDriverOverviewIntent",
+                    "slots": [],
+                    "samples": [
+                        "driver overview"
+                    ]
+                },
+                {
+                    "name": "GetInletOverviewIntent",
+                    "slots": [],
+                    "samples": [
+                        "inlet overview"
+                    ]
+                },
+                {
+                    "name": "GetJackOverviewIntent",
+                    "slots": [],
+                    "samples": [
+                        "jack overview"
+                    ]
+                },
+                {
+                    "name": "GetAnalogInputOverviewIntent",
+                    "slots": [],
+                    "samples": [
+                        "analog input overview"
+                    ]
+                },
+                {
+                    "name": "GetATOOverviewIntent",
+                    "slots": [],
+                    "samples": [
+                        "top-off overview"
+                    ]
+                },
+                {
+                    "name": "GetLightsOverviewIntent",
+                    "slots": [],
+                    "samples": [
+                        "light overview"
+                    ]
+                },
+                {
+                    "name": "GetTemperatureOverviewIntent",
+                    "slots": [],
+                    "samples": [
+                        "temperature overview"
+                    ]
+                },
+                {
+                    "name": "GetPhprobeOverviewIntent",
+                    "slots": [],
+                    "samples": [
+                        "ph overview"
+                    ]
+                },
+                {
+                    "name": "GetDosingpumpOverviewIntent",
+                    "slots": [],
+                    "samples": [
+                        "dosing pump overview"
                     ]
                 }
             ],
