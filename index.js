@@ -4,7 +4,6 @@
 const Alexa = require('ask-sdk-core');
 var https = require('https');
 var http = require('http');
-var jar = require('./jar');
 
 
 const LaunchRequestHandler = {
@@ -12,7 +11,7 @@ const LaunchRequestHandler = {
     return handlerInput.requestEnvelope.request.type === 'LaunchRequest';
   },
   handle(handlerInput) {
-    const speechText = 'Welcome to Reef-Pi!!';
+    const speechText = 'Welcome to Reef-Pi! Say: ask reef pi and the wanted info. For example: ask reef pi outlet overview.';
 
     return handlerInput.responseBuilder
       .speak(speechText)
@@ -27,7 +26,7 @@ const GetEquipmentOverviewHandler = {
   },
   async handle(handlerInput) {
     let outputSpeech = 'No data received for Equipment Overview.';
-    await getRemoteData('https://my-json-server.typicode.com/stvnmbr1/demo/equipment')
+    await getApiData('/api/equipment')
       .then((response) => {
         const data = JSON.parse(response);
         outputSpeech = `There are currently ${data.length} pieces of equipment setup. `;
@@ -76,7 +75,7 @@ const GetOutletOverviewHandler = {
   async handle(handlerInput) {
     let outputSpeech = 'No data received for Outlet Overview.';
 
-    await getRemoteData('https://my-json-server.typicode.com/stvnmbr1/demo/outlets')
+    await getApiData('/api/outlets')
       .then((response) => {
         const data = JSON.parse(response);
         outputSpeech = `There are currently ${data.length} outlets setup. `;
@@ -125,14 +124,14 @@ const GetNetworkSettingsHandler = {
   async handle(handlerInput) {
     let outputSpeech = 'No data received for Network Settings.';
 
-    await getRemoteData('https://my-json-server.typicode.com/stvnmbr1/demo/settings')
+    await getApiData('/api/settings')
       .then((response) => {
         const data = JSON.parse(response);
             //first record
-            if(data[0].https==true){
-            outputSpeech = data[0].name + ', connected to interface ' + data[0].interface + ' with listen IP address ' + data[0].address + ' and HTTPS enabled.'
-            } else if (data[0].https==false) {
-            outputSpeech = data[0].name + ', connected to interface ' + data[0].interface + ' with listen IP address ' + data[0].address + ' and HTTPS disabled.'
+            if(data.https==true){
+            outputSpeech = data.name + ', connected to interface ' + data.interface + ' with listen IP address ' + data.address + ' and HTTPS enabled.'
+            } else if (data.https==false) {
+            outputSpeech = data.name + ', connected to interface ' + data.interface + ' with listen IP address ' + data.address + ' and HTTPS disabled.'
             }
           })
       .catch((err) => {
@@ -155,7 +154,7 @@ const GetCapabilitiesOverviewHandler = {
   async handle(handlerInput) {
     let outputSpeech = 'No data received for capabilities overview.';
 
-    await getRemoteData('https://my-json-server.typicode.com/stvnmbr1/demo/capabilities')
+    await getApiData('/api/capabilities')
       .then((response) => {
         const data = JSON.parse(response);
         const datastring = JSON.stringify(data)
@@ -205,7 +204,7 @@ const GetMacroOverviewHandler = {
   async handle(handlerInput) {
     let outputSpeech = 'No data received for Macro Overview.';
 
-    await getRemoteData('https://my-json-server.typicode.com/stvnmbr1/demo/macros')
+    await getApiData('/api/macros')
       .then((response) => {
         const data = JSON.parse(response);
         outputSpeech = `There are currently ${data.length} macros setup. `;
@@ -222,7 +221,7 @@ const GetMacroOverviewHandler = {
             if(data[i].reverse==true){
             outputSpeech = outputSpeech + 'and ' + data[i].name + ' with ' + data[i].steps.length + ' steps, which is enabled.'
             } else if (data[i].reverse==false) {
-              outputSpeech = outputSpeech + 'and ' + data[i].name + ' with ' + data[i].steps.length + ' steps, which is disabled, '
+              outputSpeech = outputSpeech + 'and ' + data[i].name + ' with ' + data[i].steps.length + ' steps, which is disabled. '
             }
           } else {
             //middle record(s)
@@ -254,7 +253,7 @@ const GetTimerOverviewHandler = {
   async handle(handlerInput) {
     let outputSpeech = 'No data received for Timer Overview.';
 
-    await getRemoteData('https://my-json-server.typicode.com/stvnmbr1/demo/timers')
+    await getApiData('/api/timers')
       .then((response) => {
         const data = JSON.parse(response);
         outputSpeech = `There are currently ${data.length} timers setup. `;
@@ -303,7 +302,6 @@ const GetAPITestHandler = {
   async handle(handlerInput) {
     let outputSpeech = 'No data received for Timer Overview.';
     await getApiData('/b9416f6a-5dd5-4a16-af99-75f7c8245f53')
-
       .then((response) => {
         const data = JSON.parse(response);
         outputSpeech = `There are currently ${data.length} timers setup. `;
@@ -414,54 +412,49 @@ const HelloWorldIntentHandler = {
   }
 };
 
-const httppost = function (path) {
-  return new Promise((resolve, reject) => {
-  const options = {
-    hostname: 'webhook.site',
-    path: path,
-    port: 443,
-    method: 'POST',
-    json: true,
-    headers: { 'Content-type': 'application/json' },
-
-  };
-  
-    const login = https.request(options);
-    login.end();
-    login.on('error', (err) => reject(err));
-  });
-};
-
 const getApiData = function (path) {
   return new Promise((resolve, reject) => {
-    const logindata = JSON.stringify({user: "reef-pi", password: "reef-pi"});
-     var jar = request.jar();
-    jar.setJar(request.jar());
+    const logindata = JSON.stringify({"user": "reef-pi", "password": "reef-pi"});
+    process.env["NODE_TLS_REJECT_UNAUTHORIZED"] = 0;
 
-const loginoptions = {
-  hostname: '',
-  path: '/auth/singin',
-  port: 8800,
-  method: 'POST',
-  headers: { 'Content-type': 'application/json' },
-  json: true,
-  jar: true,
-  body: logindata,
-};
-
-const req = http.request(loginoptions);
-req.write(logindata);
-req.end();
+//    const loginoptions = {
+//  hostname: 'externalip',
+//  path: '/auth/signin',
+//  port: externalport,
+//      hostname: 'webhook.site',
+//      path: '/b9416f6a-5dd5-4a16-af99-75f7c8245f53',
+//      port: 443,
+//      method: 'POST',
+//      json: true,
+//      jar: true,
+//      body: logindata
+//    };
+//
+//    process.env["NODE_TLS_REJECT_UNAUTHORIZED"] = 0;
+//    const req = https.request(loginoptions, (res) => {
+//          if (res.statusCode < 200 || res.statusCode > 299) {
+//          'Failed with status code: ' + res.statusCode;
+//          }
+//    req.write(logindata);
+//    var loginheaders = JSON.stringify(res.headers);
+//    var getheader = JSON.parse(loginheaders);
+//    var logincookie= getheader["set-cookie"];
 
     const getoptions = {
-      hostname: '',
-      path: '/api/timers',
-      port: ,
+      hostname: 'externalip',
+      path: path,
+      port: externalport,
+//      hostname: 'webhook.site',
+//      path: '/b9416f6a-5dd5-4a16-af99-75f7c8245f53',
+//      port: 443,
       method: 'GET',
-      jar: jar.getJar(),
+//      headers: {'Cookie': logincookie},
+      headers: {'Cookie': "cookiestring"},
+      jar:true,
+      json: true,
     };
-
-    const request = http.get(getoptions, (response) => {
+    
+    const request = https.get(getoptions, (response) => {
       if (response.statusCode < 200 || response.statusCode > 299) {
         reject(new Error('Failed with status code: ' + response.statusCode));
       }
@@ -470,8 +463,13 @@ req.end();
       response.on('end', () => resolve(body.join('')));
     });
     request.on('error', (err) => reject(err));
+//req.end();
   });
 };
+    
+
+
+
 
 
 
