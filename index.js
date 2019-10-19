@@ -417,61 +417,65 @@ const getApiData = function (path) {
     const logindata = JSON.stringify({"user": "reef-pi", "password": "reef-pi"});
     process.env["NODE_TLS_REJECT_UNAUTHORIZED"] = 0;
 
-//    const loginoptions = {
-//  hostname: 'externalip',
-//  path: '/auth/signin',
-//  port: externalport,
+    const loginoptions = {
+      hostname: 'externalip',
+      path: '/auth/signin',
+      port: externalport,
+//Testing      
 //      hostname: 'webhook.site',
-//      path: '/b9416f6a-5dd5-4a16-af99-75f7c8245f53',
+//      path: '/webhooksitepath',
 //      port: 443,
-//      method: 'POST',
-//      json: true,
-//      jar: true,
-//      body: logindata
-//    };
+//      
+      method: 'POST',
+      json: true,
+      jar: true,
+      body: logindata
+    };
 //
-//    process.env["NODE_TLS_REJECT_UNAUTHORIZED"] = 0;
-//    const req = https.request(loginoptions, (res) => {
-//          if (res.statusCode < 200 || res.statusCode > 299) {
-//          'Failed with status code: ' + res.statusCode;
-//          }
-//    req.write(logindata);
-//    var loginheaders = JSON.stringify(res.headers);
-//    var getheader = JSON.parse(loginheaders);
-//    var logincookie= getheader["set-cookie"];
+    process.env["NODE_TLS_REJECT_UNAUTHORIZED"] = 0;
+    const req = https.request(loginoptions, (res) => {
+      if (res.statusCode < 200 || res.statusCode > 299) {
+        reject(new Error('login Failed with status code: ' + res.statusCode));
+      }
+      
+    
+    req.on('error', (err) => reject(err));
+
+    var loginheaders = JSON.stringify(res.headers);
+    var getheader = JSON.parse(loginheaders);
+    var logincookie= getheader["set-cookie"];
 
     const getoptions = {
       hostname: 'externalip',
       path: path,
-      port: externalport,
+      port: port,
+//Testing
 //      hostname: 'webhook.site',
-//      path: '/b9416f6a-5dd5-4a16-af99-75f7c8245f53',
+//      path: '/webhooksitepath',
 //      port: 443,
+//
       method: 'GET',
-//      headers: {'Cookie': logincookie},
-      headers: {'Cookie': "cookiestring"},
+      headers: {'Cookie': logincookie},
+//      headers: {'Cookie': "cookiestringfortesting"},
       jar:true,
       json: true,
     };
     
     const request = https.get(getoptions, (response) => {
       if (response.statusCode < 200 || response.statusCode > 299) {
-        reject(new Error('Failed with status code: ' + response.statusCode));
+        reject(new Error('post Failed with status code: ' + response.statusCode));
       }
       const body = [];
       response.on('data', (chunk) => body.push(chunk));
       response.on('end', () => resolve(body.join('')));
     });
+    request.end();
     request.on('error', (err) => reject(err));
-//req.end();
+  });
+  req.write(logindata);
+  req.end();
   });
 };
-    
-
-
-
-
-
 
 const getRemoteData = function (url) {
   return new Promise((resolve, reject) => {
