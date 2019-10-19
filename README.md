@@ -29,14 +29,12 @@ Control:
 - none, yet ;)
 
 Planned:
-Control - 1st stage - Control a macro
-Control - 2nd stage - Control defined macro through intentslots
-
-Get metrics with prometheus integration and more
-
+-Control - 1st stage - Control a macro
+-Control - 2nd stage - Control defined macro through intentslots
+-Get metrics with prometheus integration and more
 
 V2.0
-Smart Home skill
+-Smart Home skill
 
 Additional context
 
