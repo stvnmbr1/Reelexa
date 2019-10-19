@@ -29,6 +29,8 @@ Control:
 - none, yet ;)
 
 Planned:
+Control - 1st stage - Control a macro
+Control - 2nd stage - Control defined macro through intentslots
 
 Get metrics with prometheus integration and more
 
