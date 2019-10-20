@@ -19,14 +19,17 @@ Currently available capabilities:
 
 Get/Return:
 - Equipment Overview - returns: name,connected pin, state
+- Inlet Overview -
+- Analog inputs Overview -
 - Outlet Overview - returns: name,connected pin, state
 - Macro Overview - returns: name,step count, state
 - Timer Overview - returns: name,still need to figure out the *-parts
 - Network Settings - returns: dns name, listen interface, listen ip, https state
+- Capabilites - in testing
 
 
 Control:
-- none, yet ;)
+- macro(s) - in testing
 
 Planned:
 -Control - 1st stage - Control a macro
