@@ -17,28 +17,45 @@ No tutorial or guide available yet as these are the first baby steps.
 
 Currently available capabilities:
 
-Get/Return:
+Get/Return :
+
+(Working):
 - Equipment Overview - returns: name,connected pin, state
 - Inlet Overview -
 - Analog inputs Overview -
 - Outlet Overview - returns: name,connected pin, state
+- Dosing Pump Overview -
 - Macro Overview - returns: name,step count, state
 - Timer Overview - returns: name,still need to figure out the *-parts
 - Network Settings - returns: dns name, listen interface, listen ip, https state
-- Capabilites - in testing
+
+(Testing):
+- Capabilites -(trouble with response json values)
+
+(Planned):
+Temperature - Current/avg 24hr/avg 7 days ?night time/day time?
+ATO usage - current / last run / avg 24hr/avg 7 days ?night time/day time?
 
 
 Control:
-- macro(s) - in testing
 
-Planned:
--Control - 1st stage - Control a macro
--Control - 2nd stage - Control defined macro through intentslots
+(Working):
+- macro(s) - Feeding (Fixed macro naming)
+           - Water Change (In testing, Fixed macro naming)
+           - Maintenance (Fixed macro naming)
+           - Every other macro setup (without spaces in name, still fixing this)
+
+(Testing):
+
+
+(Planned):
+
+
+Other planned:
 -Get metrics with prometheus integration and more
 
-V2.0
--Smart Home skill
-
 Additional context
+
+API will need to be accessable externally - Looking for secure way to traffic HTTP POST and GET data over internet - current https connection from reef-pi should suffice
 
 Any input on what you would like Alexa to be able to do is welcome.
