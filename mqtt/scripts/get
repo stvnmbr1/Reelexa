@@ -1,0 +1,14 @@
+var https = require('https');
+var http = require('http');
+
+var getAPIdata = require('./APIGET');
+
+
+getAPIdata.getdata('/api/macros')
+.then((res) => {
+  console.log(res)
+})
+.catch((error) => {
+  console.log(`statusCode: ${res.statusCode}`)
+  console.error(error)
+})
