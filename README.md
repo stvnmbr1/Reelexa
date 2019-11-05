@@ -1,5 +1,5 @@
-# Reeflexa
-Relaxed reefing with Alexa and Reef-Pi
+# Reelexa
+Relaxed reefing with IOT and Reef-Pi
 
 Creating an Alexa skill for reef-pi
 
@@ -49,6 +49,12 @@ Control:
 
 
 (Planned):
+
+
+In Progress:
+
+Change to MQTT broker
+
 
 
 Other planned:
