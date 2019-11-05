@@ -2,28 +2,84 @@ var https = require('https');
 var http = require('http');
 
 var getAPIdata = require('./APICalls');
+var what = process.argv[2];
+var name = process.argv[3];
 
+if (what == 'macro') {
 
-if process.argv[2] = macro {
+async function macro() {
 
-getAPIdata.postdata('/api/macros/' + id + '/run')
-.then((res) => {
-  console.log(res)
-})
-.catch((error) => {
+var getmacroid = await getAPIdata.getdata('/api/macros')
+      .then((response) => {
+        const data = JSON.parse(response);
+      for (var i = 0, l = data.length; i < l; i++){
+      if (data[i].name === name) {
+      return data[i].id;
+      console.log(data[i].id);
+          }
+        }
+
+      })
+      .catch((error) => {
   console.log(`statusCode: ${res.statusCode}`)
   console.error(error)
 })
 
-} else if process.argv[2] = timer {
+var macroidstring = JSON.stringify(getmacroid);
+      var macroid = macroidstring.replace(/\"/g, "");
 
-getAPIdata.postdata('/api/timers/' + id + '/run')
+console.log(macroid)
+
+var postdata = await getAPIdata.postdata('/api/macros/' + macroid + '/run')
 .then((res) => {
-  console.log(res)
+  console.log(`ran macro with id ${macroid}`)
 })
 .catch((error) => {
+  console.log(`ErrstatusCode: ${res.statusCode}`)
+  console.error(error)
+})
+}
+
+var runmacro = macro()
+
+}
+
+
+if (what == 'timer') {
+
+async function timer() {
+
+var getmacroid = await getAPIdata.getdata('/api/timers')
+      .then((response) => {
+        const data = JSON.parse(response);
+      for (var i = 0, l = data.length; i < l; i++){
+      if (data[i].name === name) {
+      return data[i].id;
+      console.log(data[i].id);
+          }
+        }
+
+      })
+      .catch((error) => {
   console.log(`statusCode: ${res.statusCode}`)
   console.error(error)
 })
+
+var macroidstring = JSON.stringify(getmacroid);
+      var macroid = macroidstring.replace(/\"/g, "");
+
+console.log(macroid)
+
+var postdata = await getAPIdata.postdata('/api/timers/' + timerid )
+.then((res) => {
+  console.log(`ran timer with id ${timerid}`)
+})
+.catch((error) => {
+  console.log(`ErrstatusCode: ${res.statusCode}`)
+  console.error(error)
+})
+}
+
+var runtimer = timer()
 
 }
