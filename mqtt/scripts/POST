@@ -4,7 +4,9 @@ var http = require('http');
 var getAPIdata = require('./APICalls');
 
 
-getAPIdata.postdata('data')
+if process.argv[2] = macro {
+
+getAPIdata.postdata('/api/macros/' + id + '/run')
 .then((res) => {
   console.log(res)
 })
@@ -12,3 +14,16 @@ getAPIdata.postdata('data')
   console.log(`statusCode: ${res.statusCode}`)
   console.error(error)
 })
+
+} else if process.argv[2] = timer {
+
+getAPIdata.postdata('/api/timers/' + id + '/run')
+.then((res) => {
+  console.log(res)
+})
+.catch((error) => {
+  console.log(`statusCode: ${res.statusCode}`)
+  console.error(error)
+})
+
+}
