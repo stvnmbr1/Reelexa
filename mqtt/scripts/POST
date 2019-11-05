@@ -1,0 +1,14 @@
+var https = require('https');
+var http = require('http');
+
+var getAPIdata = require('./APICalls');
+
+
+getAPIdata.postdata('data')
+.then((res) => {
+  console.log(res)
+})
+.catch((error) => {
+  console.log(`statusCode: ${res.statusCode}`)
+  console.error(error)
+})
