@@ -1,0 +1,41 @@
+module.exports = {
+
+pubtomqtt : function (message){
+
+var mqtt = require('mqtt')
+
+var channel = 'reefpimqttout';
+
+var client  = mqtt.connect('localhost',{
+              clientId:"reefpimqtt",
+              username:"username",
+              password:'password',
+              clean:true,
+              port: 'port',
+              rejectUnauthorized : false,
+              ca: 'cafile',
+              protocol: 'mqtts',
+              }
+              );
+
+
+client.on('connect', function () {
+  client.subscribe(channel, function (err) {
+    if (!err) {
+      client.publish(channel, message)
+      console.log("published");
+    }
+console.log("connected");
+  })
+})
+
+client.on('message', function (topic, message) {
+  // message is Buffer
+  console.log(message.toString())
+  console.log(topic.toString())
+  client.end()
+})
+
+}
+
+}
