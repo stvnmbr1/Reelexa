@@ -7,7 +7,11 @@ var mqtt = require('./tomqtt');
 getAPIdata.getdata(process.argv[2],process.argv[3])
 .then((res) => {
   console.log(JSON.parse(res))
-  mqtt.pubtomqtt(res)
+  var datajson = JSON.parse(res)
+  var value = datajson.data.result[0].value[1]
+  console.log(value)
+  mqtt.pubtomqtt(value)
+
 })
 .catch((error) => {
   console.log(`statusCode: ${res.statusCode}`)
