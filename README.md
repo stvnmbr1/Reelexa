@@ -8,7 +8,7 @@ Be able to ask alexa for latest stats from reef-pi equipment, in a later state b
 
 I will start with the ability to retrieve stats first, in a later stage controlling macros/equipment and try to cover the entire API.
 
-No tutorial or guide available yet as these are the first baby steps.
+No tutorial or guide available yet as these are the first baby steps. BUT i try to update the wiki pages as I go
 
 now:
 As of now the skill is an alexa hosted skill that only requires amazon alexa developer account (free!)
