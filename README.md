@@ -35,8 +35,8 @@ Get/Return :
 - Capabilites -(trouble with response json values with Alexa)
 
 (Planned):
-Temperature - ?night time/day time?
-ATO usage - last run ?night time/day time?
+- Temperature - ?night time/day time?
+- ATO usage - last run ?night time/day time?
 
 
 Control:
@@ -55,10 +55,10 @@ Control:
 
 In Progress:
 
-Change to MQTT broker
-Get metrics with prometheus integration and more (mostly done)
-openHAB dashboard controller
+- Change to MQTT broker
+- Get metrics with prometheus integration and more (mostly done)
+- openHAB dashboard controller
 
 Other planned:
-ifttt integration
-hue integration
+- ifttt integration
+- hue integration
