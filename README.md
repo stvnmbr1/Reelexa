@@ -56,7 +56,8 @@ Control:
 In Progress:
 
 Change to MQTT broker
-Get metrics with prometheus integration and more
+Get metrics with prometheus integration and more (mostly done)
+openHAB dashboard controller
 
 Other planned:
 ifttt integration
